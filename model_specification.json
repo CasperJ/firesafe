@@ -1,0 +1,126 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "$ref": "#/definitions/FireSafe",
+    "definitions": {
+        "FireSafe": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "$schema": {
+                    "type": "string"
+                },
+                "models": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/Model"
+                    }
+                }
+            },
+            "required": [
+                "models"
+            ],
+            "title": "FireSafe Model"
+        },
+        "Model": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "match": {
+                    "type": "string",
+                    "pattern": "^(\\/([a-z][a-z0-9_]*[a-z0-9]|{[a-z][a-z0-9_]*[a-z0-9](\\=\\*\\*)?})+)+$"
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/NamedField"
+                    }
+                }
+            },
+            "required": [
+                "match",
+                "fields"
+            ],
+            "title": "Model"
+        },
+        "NamedField": {
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "pattern": "^[a-z][a-z0-9_]*[a-z0-9]$"
+                },
+                "datatype": {
+                    "type": "string",
+                    "enum": [
+                        "array",
+                        "boolean",
+                        "bytes",
+                        "datetime",
+                        "float",
+                        "latlng",
+                        "integer",
+                        "map",
+                        "reference",
+                        "text"
+                    ]
+                },
+                "min": {
+                    "type": "integer"
+                },
+                "max": {
+                    "type": "integer"
+                },
+                "match": {
+                    "type": "string"
+                },                
+                "nullable": {
+                    "type": "boolean"
+                },
+                "onCreate": {
+                    "type": "string",
+                    "enum": [
+                        "require",
+                        "deny",
+                        "allow"
+                    ]
+                },
+                "onUpdate": {
+                    "type": "string",
+                    "enum": [
+                        "require",
+                        "deny",
+                        "allow"
+                    ]
+                },
+                "fields": {
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/NamedField"
+                    },
+                    "minItems": 1
+                }
+            },
+            "required": [
+                "name",
+                "datatype",
+                "onCreate",
+                "onUpdate"
+            ],
+            "allOf": [
+                {
+                    "if": {
+                        "properties": {
+                            "datatype": {
+                                "const": "map"
+                            }
+                        }
+                    },
+                    "then": {
+                        "required": [
+                            "fields"
+                        ]
+                    }
+                }
+            ]
+        }
+    }
+}

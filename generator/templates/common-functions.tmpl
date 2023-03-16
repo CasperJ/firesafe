@@ -1,0 +1,14 @@
+    function existingData() { return resource.data; }
+    function incomingData() { return request.resource.data; }
+    function hasField(field) { return incomingData().keys().hasAll([field]); }
+    function delta() { return incomingData().diff(existingData()).affectedKeys(); }
+    function nullCheck(field) { return ( hasField(field) && incomingData()[field] != null) || !hasField(field); }
+    
+    function typeCheckBoolean(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is bool) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckBytes(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is bytes) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckString(field, allowNull, regex) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is string && (regex == null || incomingData()[field].matches(regex))) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckFloat(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is float && (min == null || incomingData()[field] >= min ) && (max == null || incomingData()[field] <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckInt(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is int && (min == null || incomingData()[field] >= min ) && (max == null || incomingData()[field] <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckTimestamp(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is timestamp) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckList(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is list && (min == null || incomingData()[field].size() >= min ) && (max == null || incomingData()[field].size() <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    

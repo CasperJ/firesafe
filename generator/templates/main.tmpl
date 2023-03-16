@@ -1,0 +1,10 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+{{ template "common-functions.tmpl" }}
+
+{{ range .Models }}
+{{ template "model.tmpl" . }}
+{{ end }}
+  }
+}

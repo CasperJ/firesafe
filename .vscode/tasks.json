@@ -1,0 +1,36 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Unit Tests Docker Image",
+            "type": "shell",
+            "command": "docker build -t firesafe_unit_tests:latest unit_tests",
+            "problemMatcher": []
+        },
+        {
+            "label": "Run Unit Tests",
+            "type": "shell",
+            "command": "docker rm -f /firesafe_unit_tests && docker run --rm --name firesafe_unit_tests -v \"${workspaceFolder}/unit_tests/node\":/usr/app firesafe_unit_tests:latest",
+            "problemMatcher": []
+        },
+        {
+            "label": "Compile Unit Test rules",
+            "type": "shell",
+            "command": "cd ${workspaceFolder}/generator && go run . -modelpath ../unit_tests/schemas -outfile ${workspaceFolder}/unit_tests/node/firestore.rules",
+            "problemMatcher": [
+                "$go"
+            ]
+        },
+        {
+            "label": "Compile & Run Unit Tests",
+            "dependsOrder": "sequence",
+            "dependsOn": [
+                "Compile Unit Test rules",
+                "Run Unit Tests"
+            ],
+            "problemMatcher": []
+        }
+    ]
+}

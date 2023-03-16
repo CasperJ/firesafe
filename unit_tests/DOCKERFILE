@@ -1,0 +1,10 @@
+FROM node:alpine
+
+WORKDIR /usr/app
+
+RUN npm install -g npm firebase-tools
+RUN npm install --save-dev @firebase/rules-unit-testing @types/jest jest ts-jest
+RUN apk update && apk add openjdk17
+RUN firebase setup:emulators:firestore
+# firebase emulators:exec 'jest ./test/firestore/users_rules.test.ts'
+CMD [ "npm", "test" ]

@@ -1,0 +1,59 @@
+{
+    "$schema": "../../model_specification.json",
+    "models": [
+        {
+            "match": "/allowed/{entity}",
+            "fields": [
+                {
+                    "name": "int1",
+                    "datatype": "integer",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "require",
+                    "onUpdate": "allow"
+                },
+                {
+                    "name": "int2",
+                    "datatype": "integer",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "allow",
+                    "onUpdate": "deny"
+                },
+                {
+                    "name": "int3",
+                    "datatype": "integer",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "deny",
+                    "onUpdate": "require"
+                }
+            ]
+        },
+        {
+            "match": "/nullable/{entity}",
+            "fields": [
+                {
+                    "name": "int1",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true
+                },
+                {
+                    "name": "int2",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": false
+                },
+                {
+                    "name": "int3",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow"
+                }
+            ]
+        }
+    ]
+}

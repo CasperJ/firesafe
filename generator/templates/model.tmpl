@@ -1,0 +1,18 @@
+    match {{ .Match }} {
+      allow create: if 
+        //Allowed fields
+        ({{ .AllowedFieldsOnCreateClause }}) &&
+        //Required fields
+        ({{ .RequiredFieldsOnCreateClause }}) &&
+        //Per-field checks
+        ({{ .TypeCheckFieldsClauses }})
+      
+      allow update: if
+        //Allowed fields
+        ({{ .AllowedFieldsOnUpdateClause }}) &&
+        //Required fields
+        ({{ .RequiredFieldsOnUpdateClause }}) &&
+        //Per-field checks
+        ({{ .TypeCheckFieldsClauses }})
+    }
+  

@@ -1,0 +1,136 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function existingData() { return resource.data; }
+    function incomingData() { return request.resource.data; }
+    function hasField(field) { return incomingData().keys().hasAll([field]); }
+    function delta() { return incomingData().diff(existingData()).affectedKeys(); }
+    function nullCheck(field) { return ( hasField(field) && incomingData()[field] != null) || !hasField(field); }
+    
+    function typeCheckBoolean(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is bool) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckBytes(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is bytes) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckString(field, allowNull, regex) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is string && (regex == null || incomingData()[field].matches(regex))) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckFloat(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is float && (min == null || incomingData()[field] >= min ) && (max == null || incomingData()[field] <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckInt(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is int && (min == null || incomingData()[field] >= min ) && (max == null || incomingData()[field] <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckTimestamp(field, allowNull) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is timestamp) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    function typeCheckList(field, allowNull, min, max) { return (hasField(field) && incomingData()[field] != null && incomingData()[field] is list && (min == null || incomingData()[field].size() >= min ) && (max == null || incomingData()[field].size() <= max )) || (hasField(field) && incomingData()[field] == null && allowNull) || !hasField(field); }
+    
+
+
+    match /allowed/{entity} {
+      allow create: if 
+        //Allowed fields
+        (incomingData().keys().hasOnly(["int1","int2"])) &&
+        //Required fields
+        (incomingData().keys().hasAll(["int1"])) &&
+        //Per-field checks
+        (typeCheckInt("int1", false, 1, 10) && 
+        typeCheckInt("int2", false, 1, 10) && 
+        typeCheckInt("int3", false, 1, 10))
+      
+      allow update: if
+        //Allowed fields
+        (delta().hasOnly(["int1","int3"])) &&
+        //Required fields
+        (delta().hasAll(["int3"])) &&
+        //Per-field checks
+        (typeCheckInt("int1", false, 1, 10) && 
+        typeCheckInt("int2", false, 1, 10) && 
+        typeCheckInt("int3", false, 1, 10))
+    }
+  
+
+    match /nullable/{entity} {
+      allow create: if 
+        //Allowed fields
+        (incomingData().keys().hasOnly(["int1","int2","int3"])) &&
+        //Required fields
+        (incomingData().keys().hasAll([])) &&
+        //Per-field checks
+        (typeCheckInt("int1", true, null, null) && 
+        typeCheckInt("int2", false, null, null) && 
+        typeCheckInt("int3", false, null, null))
+      
+      allow update: if
+        //Allowed fields
+        (delta().hasOnly(["int1","int2","int3"])) &&
+        //Required fields
+        (delta().hasAll([])) &&
+        //Per-field checks
+        (typeCheckInt("int1", true, null, null) && 
+        typeCheckInt("int2", false, null, null) && 
+        typeCheckInt("int3", false, null, null))
+    }
+  
+
+    match /integers/{entity} {
+      allow create: if 
+        //Allowed fields
+        (incomingData().keys().hasOnly(["int1","int2","int3","int4","int5"])) &&
+        //Required fields
+        (incomingData().keys().hasAll([])) &&
+        //Per-field checks
+        (typeCheckInt("int1", true, null, null) && 
+        typeCheckInt("int2", true, -10, null) && 
+        typeCheckInt("int3", true, null, 100) && 
+        typeCheckInt("int4", true, 10, 10) && 
+        typeCheckInt("int5", true, 10, 5))
+      
+      allow update: if
+        //Allowed fields
+        (delta().hasOnly(["int1","int2","int3","int4","int5"])) &&
+        //Required fields
+        (delta().hasAll([])) &&
+        //Per-field checks
+        (typeCheckInt("int1", true, null, null) && 
+        typeCheckInt("int2", true, -10, null) && 
+        typeCheckInt("int3", true, null, 100) && 
+        typeCheckInt("int4", true, 10, 10) && 
+        typeCheckInt("int5", true, 10, 5))
+    }
+  
+
+    match /strings/{entity} {
+      allow create: if 
+        //Allowed fields
+        (incomingData().keys().hasOnly(["s1","s2","s3"])) &&
+        //Required fields
+        (incomingData().keys().hasAll([])) &&
+        //Per-field checks
+        (typeCheckString("s1", true, null) && 
+        typeCheckString("s2", false, "^[\\p{L}0-9 ]+$") && 
+        typeCheckString("s3", false, "^[0-9]{4}$"))
+      
+      allow update: if
+        //Allowed fields
+        (delta().hasOnly(["s1","s2","s3"])) &&
+        //Required fields
+        (delta().hasAll([])) &&
+        //Per-field checks
+        (typeCheckString("s1", true, null) && 
+        typeCheckString("s2", false, "^[\\p{L}0-9 ]+$") && 
+        typeCheckString("s3", false, "^[0-9]{4}$"))
+    }
+  
+
+    match /booleans/{entity} {
+      allow create: if 
+        //Allowed fields
+        (incomingData().keys().hasOnly(["b1"])) &&
+        //Required fields
+        (incomingData().keys().hasAll([])) &&
+        //Per-field checks
+        (typeCheckBoolean("b1", true))
+      
+      allow update: if
+        //Allowed fields
+        (delta().hasOnly(["b1"])) &&
+        //Required fields
+        (delta().hasAll([])) &&
+        //Per-field checks
+        (typeCheckBoolean("b1", true))
+    }
+  
+
+  }
+}

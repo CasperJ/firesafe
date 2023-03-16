@@ -1,0 +1,63 @@
+{
+    "$schema": "../model_specification.json",
+    "models": [
+        {
+            "match": "/users/{user}",
+            "fields": [
+                {
+                    "name": "first_name",
+                    "datatype": "text",
+                    "min": 2,
+                    "max": 20,
+                    "onCreate": "require",
+                    "onUpdate": "require",
+                    "nullable": false
+                },
+                {
+                    "name": "last_name",
+                    "datatype": "text",
+                    "min": 3,
+                    "max": 50,
+                    "onCreate": "require",
+                    "onUpdate": "require",
+                    "nullable": false
+                },
+                {
+                    "name": "emails",
+                    "datatype": "array",
+                    "min": 1,
+                    "max": 10,
+                    "nullable": false,
+                    "items": {
+                        "datatype": "text",
+                        "min": 6,
+                        "max": 256,
+                        "nullable": false
+                    }
+                },
+                {
+                    "name": "address",
+                    "datatype": "map",
+                    "fields": [
+                        {
+                            "name": "street1",
+                            "datatype": "text"
+                        },
+                        {
+                            "name": "street2",
+                            "datatype": "text"
+                        },
+                        {
+                            "name": "postal_code",
+                            "datatype": "text"
+                        },
+                        {
+                            "name": "city",
+                            "datatype": "text"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}

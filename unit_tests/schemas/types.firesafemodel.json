@@ -1,0 +1,91 @@
+{
+    "$schema": "../../model_specification.json",
+    "models": [
+        {
+            "match": "/integers/{entity}",
+            "fields": [
+                {
+                    "name": "int1",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true
+                },
+                {
+                    "name": "int2",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true,
+                    "min": -10
+                },
+                {
+                    "name": "int3",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true,
+                    "max": 100
+                },
+                {
+                    "name": "int4",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true,
+                    "min": 10,
+                    "max": 10
+                },
+                {
+                    "name": "int5",
+                    "datatype": "integer",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true,
+                    "min": 10,
+                    "max": 5
+                }
+            ]
+        },
+        {
+            "match": "/strings/{entity}",
+            "fields": [
+                {
+                    "name": "s1",
+                    "datatype": "text",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true
+                },
+                {
+                    "name": "s2",
+                    "datatype": "text",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": false,
+                    "match": "^[\\p{L}0-9 ]+$"
+                },
+                {
+                    "name": "s3",
+                    "datatype": "text",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": false,
+                    "match": "^[0-9]{4}$"
+                }
+            ]
+        },
+        {
+            "match": "/booleans/{entity}",
+            "fields": [
+                {
+                    "name": "b1",
+                    "datatype": "boolean",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "nullable": true
+                }
+            ]
+        }
+    ]
+}

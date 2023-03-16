@@ -1,0 +1,64 @@
+{
+    "$schema": "../model_specification.json",
+    "models": [
+        {
+            "match": "/todos/{todo}",
+            "fields": [
+                {
+                    "name": "haha",
+                    "datatype": "text",
+                    "match": "^[a-zA-Z\"-0-9]+$",
+                    "onCreate": "allow",
+                    "onUpdate": "allow"
+                },
+                {
+                    "name": "haha2",
+                    "datatype": "integer",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "allow",
+                    "onUpdate": "allow"
+                },
+                {
+                    "name": "haha233",
+                    "datatype": "array",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "allow",
+                    "onUpdate": "allow"
+                },
+                {
+                    "name": "haha3",
+                    "datatype": "array",
+                    "min": 1,
+                    "max": 10,
+                    "onCreate": "allow",
+                    "onUpdate": "allow"
+                },
+                {
+                    "name": "haha3_1",
+                    "datatype": "array",
+                    "min": 1,
+                    "max": 10,
+                    "nullable": false,
+                    "onCreate": "require",
+                    "onUpdate": "deny"
+                },
+                {
+                    "name": "inline_object",
+                    "datatype": "map",
+                    "onCreate": "allow",
+                    "onUpdate": "allow",
+                    "fields": [
+                        {
+                            "name": "asdf",
+                            "datatype": "boolean",
+                            "onCreate": "allow",
+                            "onUpdate": "allow"
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
